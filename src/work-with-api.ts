@@ -3,16 +3,28 @@
 
 // API URL: https://jsonplaceholder.typicode.com/posts
 // Use axios library
+import axios from 'axios';
+
 type APIResponseType = {
     id: number,
-    userId: number
+    userId: number,
     title: string,
     body: string,
-}
+};
 
 async function fetchLongPosts(): Promise<APIResponseType[]> {
-    // Your code goes here
-    return []
+    try {
+        // Make a GET request to the API
+        const response = await axios.get('https://jsonplaceholder.typicode.com/posts');
+        
+        // Filter posts with body length greater than 100 characters
+        const longPosts = response.data.filter((post: APIResponseType) => post.body.length > 100);
+        
+        return longPosts;
+    } catch (error) {
+        console.error('Error fetching posts:', error);
+        return [];
+    }
 }
 
-module.exports = { fetchLongPosts }
+module.exports = { fetchLongPosts };
