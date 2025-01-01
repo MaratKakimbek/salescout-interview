@@ -12,13 +12,23 @@
 // { data: { ... }, status: 200 }
 // ] 
 type RequestsResult = {
-    data: any,
-    status: number
-}
+    data: any;
+    status: number;
+};
 
 async function fetchAll(urls: string[]): Promise<RequestsResult[]> {
-    //Your code goes here
-    return [];
+    const promises = urls.map(async (url) => {
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            return { data, status: response.status };
+        } catch (error) {
+            return { data: error.message, status: 500 };
+        }
+    });
+
+    const results = await Promise.all(promises);
+    return results;
 }
 
 module.exports = { fetchAll };
